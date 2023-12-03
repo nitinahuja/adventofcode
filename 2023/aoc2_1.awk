@@ -1,37 +1,34 @@
-BEGIN { FS=":|;|\n"; id_sum = 0;
+# Advent of code 20023 - Day2 Part 1 and Part 2
+
+BEGIN { FPAT="[[:digit:]]+ (red|green|blue)"; id_sum = 0; power = powersum = 0;
 #Max available cubes
 max["red"] = 12;
-max["green"] = 14;
-max["blue"] = 15;
+max["green"] = 13;
+max["blue"] = 14;
 }
-{
-    print $0
-    #Loop through the games and check if any cube count is over max
-    for(i=2; i<= NF; i++)
-    {
-        flag = 1
-        patsplit($i, cubes, "[[:digit:]]+ (red|green|blue)")
-        for(x in cubes) {
 
-            #print cubes[x];
-            split(cubes[x], cube, " ")
-            # print "count:", cube[1], "color:", cube[2]
-            if (cube[1] > max[cube[2]]) {
-                #set a flag and break - no need to continue
-                print "Skipping", NR, "count:", cube[1], "color:", cube[2]
-                flag = 0;
-                break;
-            }
-        }
-        if (flag == 0) {
-            print "Skipping", NR
-            next; # Move to the next record if any game is not going to succeed.
-        }
+function max_num(a,b) {return (a > b)?a:b; }
+
+{
+    #print $0
+    #Loop through the games and check if any cube count is over max
+    r=g=b = 0;
+    for(i=1; i<= NF; i++)
+    {
+        split($i, cube, " ")
+        r = (cube[2] == "red")? max_num(r, cube[1]):r
+        g = (cube[2] == "green")? max_num(g, cube[1]):g
+        b = (cube[2] == "blue")? max_num(b, cube[1]):b
     }
-    print "Adding", NR
-    id_sum = id_sum + NR;
-    print "Total =", id_sum
+
+    power = r*g*b;
+    powersum += power;
+    #Check for part 1
+    if (r <= max["red"] && g <= max["green"] && b <= max["blue"]) {
+        id_sum = id_sum + NR;
+    }
+    
 }
 END {
-    print id_sum;
+    print "Part 1", id_sum, "Part 2", powersum;
 }
