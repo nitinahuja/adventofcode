@@ -56,11 +56,9 @@ END {
                 }
                 for (part in adjacent) {
                     engine += adjacent[part];
-                    print adjacent[part];
                 }
                     #Puzzle part 2
                 if (lines[i][j] == "*" && count == 2) {
-                    print adjacent[0], adjacent[1];
                     ratio += adjacent[0] * adjacent[1];
                 }
 
